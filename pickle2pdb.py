@@ -13,8 +13,11 @@ def load_data(file):
         data = pickle.load(f)
     
     glass_structure = Frame()
-    glass_structure.cell = UnitCell(data['box'])
+    glass_structure.cell = UnitCell(data['box'] / 3)
     for i in range(4096):
+        if any(data['positions'][i] > data['box'] / 3):
+            continue
+
         if data['types'][i] == 0:
             glass_structure.add_atom(Atom("Si"), data['positions'][i])
         elif data['types'][i] == 1:
